@@ -1,0 +1,12 @@
+name: halfFinished
+title: halfFinished
+username:
+account: zhenmingyang
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 251013
+bundleId: 1146805
+url: https://zhenmingyang.shinyapps.io/halfFinished/
+when: 1513888328.22055
+asMultiple: FALSE
+asStatic: FALSE
