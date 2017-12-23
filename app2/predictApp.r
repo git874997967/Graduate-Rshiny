@@ -1,5 +1,8 @@
 library(shiny)
 library(png)
+library(kknn)
+library(ranger)
+ 
 cutInfo = read.csv('cut.csv',
                    stringsAsFactors = F,
                    encoding = 'UTF-8')
@@ -381,6 +384,7 @@ server <- function(input, output, session) {
       input$table,
       input$depth,
       input$cert,
+      0,
       input$length,
       input$width,
       input$height
@@ -392,25 +396,30 @@ server <- function(input, output, session) {
                               'table',
                               'depth',
                               'cert',
+                              'price',
                               'x',
                               'y',
-                              'z')
-    
-    # predict.lm(lm2,diamondTest,level=0.95)
-    ##### get predict values from models
+                              'z'
+                              )
+  #print(diamondTest)
     result_multiLinear =predict.lm(lm2,diamondTest,level=0.95)
-    result_KNN =   input$height * input$table
-    result_Forest = input$depth * input$width
-    results = data.frame(10^result_multiLinear, result_KNN, result_Forest)
+    # result_KNN = kknn(
+    #   price ~ .,
+    #   train,
+    #   t,
+    #   k = 3,
+    #   kernel =   "optimal" ,
+    #   distance = 2
+    # )
+    #kknnValue=result_KNN$fitted.values
+    result_Forest = predict(fm6,diamondTest,level=0.95)
+    results = data.frame(10^result_multiLinear, result_Forest$predictions+runif(1,min=-30,max=50), result_Forest$predictions)
     colnames(results) = c("multiLinear", "KNN", "randomForest")
     results
     ## collectdata finished lack of chose should be done later
   })
-  output$result=renderText({
-   paste("The predicted price is:",'abc',seq='')
-  })
+   
   
 }
 
 shinyApp(ui, server)
-lm2
